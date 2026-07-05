@@ -573,7 +573,7 @@ a {
 
 /* Contact Section */
 .contact-card {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 48px;
     text-align: center;
@@ -586,24 +586,44 @@ a {
 }
 
 .contact-links {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .contact-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.1rem;
-    padding: 12px 24px;
-    width: 100%;
-    max-width: 300px;
+    gap: 16px;
+    padding: 16px 24px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     transition: var(--transition-snappy);
+    text-decoration: none;
+}
+
+.contact-link div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.contact-label {
+    font-size: 0.75rem;
+    color: var(--accent-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contact-value {
+    font-size: 0.95rem;
+    color: var(--text-primary);
 }
 
 .contact-link:hover {
@@ -614,6 +634,7 @@ a {
 
 .contact-link i {
     color: var(--accent-primary);
+    flex-shrink: 0;
 }
 
 footer {
