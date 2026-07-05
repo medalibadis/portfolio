@@ -99,73 +99,156 @@ a {
     border-radius: 2px;
 }
 
-/* Navbar */
-.navbar {
+/* ─── Scroll Progress Bar ─── */
+.scroll-progress-bar {
     position: fixed;
     top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+    box-shadow: 0 0 10px var(--accent-primary);
+    z-index: 1100;
+    transition: width 0.1s linear;
+}
+
+/* ─── Navbar ─── */
+.navbar {
+    position: fixed;
+    top: 3px;
     width: 100%;
     z-index: 1000;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: rgba(5, 5, 5, 0.8);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(5, 5, 5, 0.75);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(5, 5, 5, 0.95);
+    box-shadow: 0 4px 30px rgba(0, 240, 255, 0.08);
+    border-bottom-color: rgba(0, 240, 255, 0.15);
 }
 
 .nav-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 24px;
+    padding: 14px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 24px;
 }
 
+/* ─── Logo ─── */
 .logo {
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo-initials {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+    color: #050505;
+    font-family: var(--font-heading);
     font-weight: 800;
-    color: var(--accent-primary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+    transition: var(--transition-snappy);
     letter-spacing: 1px;
 }
 
+.logo:hover .logo-initials {
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.6);
+    transform: rotate(-5deg) scale(1.08);
+}
+
+.logo-name {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, var(--text-primary), var(--accent-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ─── Nav Links ─── */
 .nav-links {
     display: flex;
-    gap: 32px;
+    gap: 6px;
 }
 
-.nav-links a {
-    font-size: 0.95rem;
+.nav-link {
+    position: relative;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-secondary);
-    transition: var(--transition-snappy);
-    position: relative;
+    padding: 7px 14px;
+    border-radius: 8px;
+    transition: color 0.25s ease, background 0.25s ease;
+    text-decoration: none;
 }
 
-.nav-links a:hover {
-    color: var(--text-primary);
-}
-
-.nav-links a::after {
+.nav-link::after {
     content: '';
     position: absolute;
-    width: 0;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 20px;
     height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: var(--accent-primary);
-    transition: width var(--transition-snappy);
+    background: var(--accent-primary);
+    border-radius: 2px;
+    box-shadow: 0 0 6px var(--accent-primary);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.nav-links a:hover::after {
-    width: 100%;
+.nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(0, 240, 255, 0.06);
 }
 
+.nav-link:hover::after,
+.nav-link.active::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.nav-link.active {
+    color: var(--accent-primary);
+    background: rgba(0, 240, 255, 0.08);
+}
+
+/* ─── Nav Right Group ─── */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* ─── Language Toggle ─── */
 .lang-toggle {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
     color: var(--text-secondary);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 5px 10px;
 }
 
 .lang-toggle button {
@@ -176,18 +259,77 @@ a {
     font-family: inherit;
     font-weight: inherit;
     transition: var(--transition-snappy);
+    font-size: 0.82rem;
+    padding: 2px 4px;
+    border-radius: 4px;
 }
 
 .lang-toggle button.active {
     color: var(--accent-primary);
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
 }
 
+/* ─── Navbar Profile Avatar ─── */
+.nav-avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: block;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+.nav-avatar img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 2px solid rgba(0, 240, 255, 0.3);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+}
+
+.nav-avatar-ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent-primary), var(--accent-secondary), transparent, var(--accent-primary));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: spinRing 4s linear infinite;
+}
+
+.nav-avatar:hover img {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
+}
+
+.nav-avatar:hover .nav-avatar-ring {
+    opacity: 1;
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Mobile Menu Button ─── */
 .mobile-menu-btn {
     display: none;
-    background: none;
-    border: none;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
     color: var(--text-primary);
     cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: var(--transition-snappy);
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(0, 240, 255, 0.1);
+    border-color: rgba(0, 240, 255, 0.3);
 }
 
 /* Hero Section */
@@ -301,8 +443,58 @@ a {
 /* About Section */
 .about-card {
     padding: 40px;
-    max-width: 900px;
+    max-width: 950px;
     margin: 0 auto;
+}
+
+.about-content-layout {
+    display: flex;
+    gap: 48px;
+    align-items: center;
+}
+
+.about-image-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    flex-shrink: 0;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    transition: var(--transition-snappy);
+    position: relative;
+    z-index: 1;
+}
+
+.about-image-container:hover .profile-img {
+    transform: scale(1.03);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.45);
+}
+
+.about-image-container::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary), transparent, var(--accent-primary));
+    z-index: 0;
+    animation: rotateGlow 8s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .about-text p {
@@ -649,10 +841,40 @@ footer {
 @media (max-width: 768px) {
     .nav-links {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(5, 5, 5, 0.97);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+        padding: 16px 24px;
+        gap: 4px;
+        z-index: 999;
+    }
+    
+    .nav-links.mobile-open {
+        display: flex;
+    }
+    
+    .nav-link {
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+
+    .nav-avatar {
+        display: none;
     }
     
     .mobile-menu-btn {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar {
+        position: fixed;
     }
     
     .section-container {
@@ -661,6 +883,18 @@ footer {
     
     .hero-cta {
         flex-direction: column;
+    }
+    
+    .about-content-layout {
+        flex-direction: column;
+        text-align: center;
+        gap: 32px;
+    }
+    
+    .about-image-container {
+        width: 180px;
+        height: 180px;
+        margin: 0 auto;
     }
     
     .contact-card {

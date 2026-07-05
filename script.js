@@ -123,31 +123,92 @@ function setLanguage(lang) {
 btnEn.addEventListener('click', () => setLanguage('en'));
 btnFr.addEventListener('click', () => setLanguage('fr'));
 
-// Smooth scrolling for navigation links
+// ─── Smooth scrolling for navigation links ───
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth'
-            });
+            target.scrollIntoView({ behavior: 'smooth' });
         }
     });
 });
 
-// Add subtle scroll reveal animation
+// ─── Scroll progress bar + Navbar scroll effect ───
+const scrollProgressBar = document.getElementById('scrollProgress');
+const navbar = document.getElementById('navbar');
+
+window.addEventListener('scroll', () => {
+    // Progress bar
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    scrollProgressBar.style.width = progress + '%';
+
+    // Navbar shadow on scroll
+    if (scrollTop > 40) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+}, { passive: true });
+
+// ─── Active nav link on scroll (IntersectionObserver) ───
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + entry.target.id) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+}, { rootMargin: '-40% 0px -55% 0px' });
+
+sections.forEach(section => sectionObserver.observe(section));
+
+// ─── Mobile menu toggle ───
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const navLinksContainer = document.getElementById('navLinks');
+const menuIcon = document.getElementById('menuIcon');
+let menuOpen = false;
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+        menuOpen = !menuOpen;
+        navLinksContainer.classList.toggle('mobile-open', menuOpen);
+        menuIcon.setAttribute('data-lucide', menuOpen ? 'x' : 'menu');
+        lucide.createIcons();
+    });
+}
+
+// Close mobile menu on link click
+navLinksContainer.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        menuOpen = false;
+        navLinksContainer.classList.remove('mobile-open');
+        menuIcon.setAttribute('data-lucide', 'menu');
+        lucide.createIcons();
+    });
+});
+
+// ─── Scroll-reveal animation for panels ───
 const observerOptions = {
     threshold: 0.1,
     rootMargin: "0px 0px -50px 0px"
 };
 
-const observer = new IntersectionObserver((entries) => {
+const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
-            observer.unobserve(entry.target);
+            revealObserver.unobserve(entry.target);
         }
     });
 }, observerOptions);
@@ -156,5 +217,6 @@ document.querySelectorAll('.glass-panel').forEach(panel => {
     panel.style.opacity = '0';
     panel.style.transform = 'translateY(30px)';
     panel.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    observer.observe(panel);
+    revealObserver.observe(panel);
 });
+
