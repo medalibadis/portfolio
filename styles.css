@@ -450,6 +450,16 @@ a {
     color: var(--accent-primary);
 }
 
+.btn-sm.disabled-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-sm.disabled-link:hover {
+    color: var(--text-primary);
+}
+
 .btn-sm i {
     width: 16px;
     height: 16px;
